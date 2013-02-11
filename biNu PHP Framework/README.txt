@@ -29,6 +29,9 @@ try {
 		/* Override TTL for testing purposes */
 		$binu_app->time_to_live = 1;
 	}
+	
+	$binu_app->add_style( array('name' => 'body_text', 'color' => '#1540eb') );
+	$binu_app->add_text('Hello world', 'body_text');
 
 	/* Process menu options */
 	$binu_app->add_menu_item( '8', 'My App Home', $binu_app->application_URL  );

@@ -17,20 +17,16 @@
  * Please feel free to fork and improve this script, extend it's functionality, as well as adapt for different scripting languages
  * 
  */
-
-// Helper constants
-define('CR_LF',chr(13).chr(10));
-
-/*
- * Time to live constants
- */
-define('TTL_TESTING',1);
-define('TTL_IMMEDIATE',1);
-define('TTL_6_HOURS',21600);
-define('TTL_12_HOURS',43200);
-define('TTL_24_HOURS',86400);
-
 class biNu_app {
+    /*
+     * Time to live constants
+     */
+    const _TTL_TESTING = 1;
+    const _TTL_IMMEDIATE = 1;
+    const _TTL_1_HOUR = 3600;
+    const _TTL_6_HOURS = 21600;
+    const _TTL_12_HOURS = 43200;
+    const _TTL_24_HOURS = 86400;
 	/*
 	 * Developer ID as assigned by DevCentral
 	 */
@@ -104,7 +100,7 @@ class biNu_app {
 	 *
 	 * Default: 21600 seconds (ie 6 hours, note TTL constant)
 	 */
-	public $time_to_live = TTL_TESTING;
+	public $time_to_live = self::_TTL_TESTING;
 
 	/*
 	 * Boolean flag to toggle display of Back link
@@ -165,14 +161,14 @@ class biNu_app {
 		$this->add_style( array( 'name' => 'error_style', 'color' => '#ff000000' ) );
 		$this->add_header( $this->application_name, '#ffffffff' );
 
-		$this->body_BML .= '<pageSegment x="0" y="30" w="width">'.CR_LF;
-		$this->body_BML .= '	<panning>'.CR_LF;
-		$this->body_BML .= '		<text x="2" y="y" w="width" mode="wrap" align="center" style="error_style">'.trim($error_message).'</text>'.CR_LF;
-		$this->body_BML .= '		<text x="4" y="y + 4" w="width" mode="wrap" align="left" style="error_style">Key 1. Back</text>'.CR_LF;
-		$this->body_BML .= '		<text x="4" y="y" w="width" mode="wrap" align="left" style="error_style">Key 2. Home</text>'.CR_LF;
-		$this->body_BML .= '		<text x="4" y="y" w="width" mode="wrap" align="left" style="error_style">Key 3. Exit</text>'.CR_LF;
-		$this->body_BML .= '	</panning>'.CR_LF;
-		$this->body_BML .= '</pageSegment>'.CR_LF;
+		$this->body_BML .= '<pageSegment x="0" y="30" w="width">'.PHP_EOL;
+		$this->body_BML .= '	<panning>'.PHP_EOL;
+		$this->body_BML .= '		<text x="2" y="y" w="width" mode="wrap" align="center" style="error_style">'.trim($error_message).'</text>'.PHP_EOL;
+		$this->body_BML .= '		<text x="4" y="y + 4" w="width" mode="wrap" align="left" style="error_style">Key 1. Back</text>'.PHP_EOL;
+		$this->body_BML .= '		<text x="4" y="y" w="width" mode="wrap" align="left" style="error_style">Key 2. Home</text>'.PHP_EOL;
+		$this->body_BML .= '		<text x="4" y="y" w="width" mode="wrap" align="left" style="error_style">Key 3. Exit</text>'.PHP_EOL;
+		$this->body_BML .= '	</panning>'.PHP_EOL;
+		$this->body_BML .= '</pageSegment>'.PHP_EOL;
 
 		$this->add_footer( 'Restart biNu' );
 		// $this->addMenu( 'error_menu', )
@@ -205,7 +201,7 @@ class biNu_app {
 		if (isset($init_params['ttl'])) {
 			$this->time_to_live = intval($init_params['ttl']);
 		} else {
-			$this->time_to_live = TTL_TESTING;
+			$this->time_to_live = self::_TTL_TESTING;
 		}
 
 		// Initialise biNu cookie values and client information
@@ -287,26 +283,26 @@ class biNu_app {
 	}
 
 	private function get_styles() {
-		$bml = '<styles>'.CR_LF;
+		$bml = '<styles>'.PHP_EOL;
 
 		foreach ($this->styles as $style_array) {
-			$bml .= '  <style name="'.trim($style_array['name']).'">'.CR_LF;
+			$bml .= '  <style name="'.trim($style_array['name']).'">'.PHP_EOL;
 
 			// Build style elements
 			if (! empty($style_array['color'])) {
-				$bml .= '  <color value="'.trim($style_array['color']).'"/>'.CR_LF;
+				$bml .= '  <color value="'.trim($style_array['color']).'"/>'.PHP_EOL;
 			} else {
-				$bml .= '  <color value="'.$this->font_color.'"/>'.CR_LF;
+				$bml .= '  <color value="'.$this->font_color.'"/>'.PHP_EOL;
 			}
 			if (! empty($style_array['font'])) {
-				$bml .= '  <font face="'.trim($style_array['font']).'" size="'.((isset($style_array['font_size']) AND (intval($style_array['font_size']) > 0)) ? intval($style_array['font_size']) : $this->font_size).'"/>'.CR_LF;
+				$bml .= '  <font face="'.trim($style_array['font']).'" size="'.((isset($style_array['font_size']) AND (intval($style_array['font_size']) > 0)) ? intval($style_array['font_size']) : $this->font_size).'"/>'.PHP_EOL;
 			} else {
-				$bml .= '  <font face="'.$this->base_font.'" size="'.$this->font_size.'"/>'.CR_LF;
+				$bml .= '  <font face="'.$this->base_font.'" size="'.$this->font_size.'"/>'.PHP_EOL;
 			}
-			$bml .= '  </style>'.CR_LF;
+			$bml .= '  </style>'.PHP_EOL;
 		}
 
-		$bml .= '</styles>'.CR_LF;
+		$bml .= '</styles>'.PHP_EOL;
 		return trim($bml);
 	}
 
@@ -329,12 +325,12 @@ class biNu_app {
 			$width = $this->screen_width;
 		}
 
-		$this->header_BML = '<pageSegment x="0" y="0">'.CR_LF;
-		$this->header_BML .= '	<fixed>'.CR_LF;
-		$this->header_BML .= '		<rectangle x="0" y="0" h="'.intval($height).'" radius="0" style="header_style"/>'.CR_LF;
-		$this->header_BML .= '		<text y="4" w="width" mode="wrap" align="'.$text_align.'" style="header_text">'.(empty($app_name) ? $this->application_name : $app_name).'</text>'.CR_LF;
-		$this->header_BML .= '	</fixed>'.CR_LF;
-		$this->header_BML .= '</pageSegment>'.CR_LF;
+		$this->header_BML = '<pageSegment x="0" y="0">'.PHP_EOL;
+		$this->header_BML .= '	<fixed>'.PHP_EOL;
+		$this->header_BML .= '		<rectangle x="0" y="0" h="'.intval($height).'" radius="0" style="header_style"/>'.PHP_EOL;
+		$this->header_BML .= '		<text y="4" w="width" mode="wrap" align="'.$text_align.'" style="header_text">'.(empty($app_name) ? $this->application_name : $app_name).'</text>'.PHP_EOL;
+		$this->header_BML .= '	</fixed>'.PHP_EOL;
+		$this->header_BML .= '</pageSegment>'.PHP_EOL;
 
 		// Set screen display height values
 		$this->header_height = intval($height);
@@ -367,32 +363,32 @@ class biNu_app {
 			$width = $this->screen_width;
 		}
 
-//		$this->footer_BML = '<pageSegment x="0" y="-'.intval($height).'">'.CR_LF;
-//		$this->footer_BML .= '	<fixed>'.CR_LF;
-//		$this->footer_BML .= '		<rectangle x="0" y="0" h="'.intval($height).'" radius="0" style="footer_style"/>'.CR_LF;
+//		$this->footer_BML = '<pageSegment x="0" y="-'.intval($height).'">'.PHP_EOL;
+//		$this->footer_BML .= '	<fixed>'.PHP_EOL;
+//		$this->footer_BML .= '		<rectangle x="0" y="0" h="'.intval($height).'" radius="0" style="footer_style"/>'.PHP_EOL;
 //
 //		if ((! empty($footer_text)) OR (count($this->menus) > 0)) {
 //			$this->add_style( array( 'name' => 'footer_text', 'color' => '#ffffffff' ) );
 //
 //			if (! empty($footer_text)) {
-//				$this->footer_BML .= '		<text x="0" y="0" w="'.intval($width).'" mode="wrap" align="'.$text_align.'" style="footer_text">'.trim($footer_text).'</text>'.CR_LF;
+//				$this->footer_BML .= '		<text x="0" y="0" w="'.intval($width).'" mode="wrap" align="'.$text_align.'" style="footer_text">'.trim($footer_text).'</text>'.PHP_EOL;
 //			}
 //
 //			if (count($this->menus) > 0) {
-//				$this->footer_BML .= '		<link key="action" spider="N" actionType="menu" menu="action_menu" x="0" y="0" w="width / 3" align="left">'.CR_LF;
-//				$this->footer_BML .= '			<text x="1" y="0" w="width / 3 - 2" mode="truncate" style="footer_text" align="left">Menu</text>'.CR_LF;
-//				$this->footer_BML .= '		</link>'.CR_LF;
+//				$this->footer_BML .= '		<link key="action" spider="N" actionType="menu" menu="action_menu" x="0" y="0" w="width / 3" align="left">'.PHP_EOL;
+//				$this->footer_BML .= '			<text x="1" y="0" w="width / 3 - 2" mode="truncate" style="footer_text" align="left">Menu</text>'.PHP_EOL;
+//				$this->footer_BML .= '		</link>'.PHP_EOL;
 //				// Following line should be commented out in production
-//				// $this->footer_BML .= '			<text x="0" y="0" w="width" mode="truncate" style="footer_text" align="center">('.$this->screen_width.'x'.$this->screen_height.'-'.$this->app_size.')</text>'.CR_LF;
+//				// $this->footer_BML .= '			<text x="0" y="0" w="width" mode="truncate" style="footer_text" align="center">('.$this->screen_width.'x'.$this->screen_height.'-'.$this->app_size.')</text>'.PHP_EOL;
 //				if ($this->show_back_link) {
-//					// $this->footer_BML .= '		<link key="navigate" spider="Y" actionType="back" x="width * 2/3" y="0" w="width / 3" align="right">'.CR_LF;
-//					$this->footer_BML .= '			<text x="width * 2/3" y="0" w="width / 3 - 2" mode="truncate" style="footer_text" align="right">Back</text>'.CR_LF;
+//					// $this->footer_BML .= '		<link key="navigate" spider="Y" actionType="back" x="width * 2/3" y="0" w="width / 3" align="right">'.PHP_EOL;
+//					$this->footer_BML .= '			<text x="width * 2/3" y="0" w="width / 3 - 2" mode="truncate" style="footer_text" align="right">Back</text>'.PHP_EOL;
 //					// $this->footer_BML .= '		</link>';
 //				}
 //			}
 //		}
-//		$this->footer_BML .= '	</fixed>'.CR_LF;
-//		$this->footer_BML .= '</pageSegment>'.CR_LF;
+//		$this->footer_BML .= '	</fixed>'.PHP_EOL;
+//		$this->footer_BML .= '</pageSegment>'.PHP_EOL;
 
 
 		// Set screen display height values
@@ -418,13 +414,13 @@ class biNu_app {
 
 	private function get_text() {
 		if (count($this->text_area) > 0) {
-			$the_text_area = '<pageSegment y="y">'.CR_LF;
-			$the_text_area .= '	<fixed>'.CR_LF;
+			$the_text_area = '<pageSegment y="y">'.PHP_EOL;
+			$the_text_area .= '	<fixed>'.PHP_EOL;
 			foreach ($this->text_area as $text_section) {
-				$the_text_area .= '		<text x="'.$text_section['x'].'" y="'.$text_section['y'].'" w="width" mode="'.$text_section['mode'].'" align="'.$text_section['align'].'" style="'.$text_section['style'].'">'.trim($text_section['text']).'</text>'.CR_LF;
+				$the_text_area .= '		<text x="'.$text_section['x'].'" y="'.$text_section['y'].'" w="width" mode="'.$text_section['mode'].'" align="'.$text_section['align'].'" style="'.$text_section['style'].'">'.trim($text_section['text']).'</text>'.PHP_EOL;
 			}
-			$the_text_area .= '	</fixed>'.CR_LF;
-			$the_text_area .= '</pageSegment>'.CR_LF;
+			$the_text_area .= '	</fixed>'.PHP_EOL;
+			$the_text_area .= '</pageSegment>'.PHP_EOL;
 
 			return trim($the_text_area);
 		} else {
@@ -449,21 +445,21 @@ class biNu_app {
 			foreach ($this->list_items as $item) {
 				if ($first_item) {
 					$first_item = FALSE;
-					$listings_BML = '<list name="'.$item[0]['list_name'].'">'.CR_LF;
+					$listings_BML = '<list name="'.$item[0]['list_name'].'">'.PHP_EOL;
 				}
-				$listings_BML .= '	<listItem>'.CR_LF;
+				$listings_BML .= '	<listItem>'.PHP_EOL;
 				foreach ($item as $item_field) {
 					$listings_BML .= '		<item'.$item_field['type'].' name="'.$item_field['name'].'" ';
 
 					if (! empty($item_field['url']) AND (strlen(trim($item_field['url'])) > 0)) {
-						$listings_BML .= 'url="'.$item_field['url'].'"/>'.CR_LF;
+						$listings_BML .= 'url="'.$item_field['url'].'"/>'.PHP_EOL;
 					} else {
-						$listings_BML .= 'value="'.$item_field['value'].'"/>'.CR_LF;
+						$listings_BML .= 'value="'.$item_field['value'].'"/>'.PHP_EOL;
 					}
 				}
-				$listings_BML .= '	</listItem>'.CR_LF;
+				$listings_BML .= '	</listItem>'.PHP_EOL;
 			}
-			$listings_BML .= '</list>'.CR_LF;
+			$listings_BML .= '</list>'.PHP_EOL;
 			return trim($listings_BML);
 		} else {
 			return '';
@@ -498,9 +494,9 @@ class biNu_app {
 	}
 
 	private function get_actions() {
-		$this->footer_actions_BML = '<control textUTF8="true">'.CR_LF;
-		$this->footer_actions_BML .= '<footer labelStyle="footer_text" barStyle="footer_style">'.CR_LF;
-		// $this->footer_actions_BML .= '	<actions>'.CR_LF;
+		$this->footer_actions_BML = '<control textUTF8="true">'.PHP_EOL;
+		$this->footer_actions_BML .= '<footer labelStyle="footer_text" barStyle="footer_style">'.PHP_EOL;
+		// $this->footer_actions_BML .= '	<actions>'.PHP_EOL;
 
 		// Check for Menus here?
 		$bml_actions = '';
@@ -534,14 +530,14 @@ class biNu_app {
 			if (! empty($action_array['url'])) {
 				$bml_actions .= trim($action_array['url']);
 			}
-			$bml_actions .= '</action>'.CR_LF;
+			$bml_actions .= '</action>'.PHP_EOL;
 		}
 
 		$this->footer_actions_BML .= $bml_actions;
 
-		// $this->footer_actions_BML .= '	</actions>'.CR_LF;
-		$this->footer_actions_BML .= '</footer>'.CR_LF;
-		$this->footer_actions_BML .= '</control>'.CR_LF;
+		// $this->footer_actions_BML .= '	</actions>'.PHP_EOL;
+		$this->footer_actions_BML .= '</footer>'.PHP_EOL;
+		$this->footer_actions_BML .= '</control>'.PHP_EOL;
 		return trim($this->footer_actions_BML);
 	}
 
@@ -579,8 +575,8 @@ class biNu_app {
 		$bml_menu = '';
 		if (count($this->menus) > 0) {
 			$key_counter = 1;
-			// $bml_menu .= '<menu name="action_menu" align="Left">'.CR_LF;
-			$bml_menu .= '<menu text="Menu" key="action">'.CR_LF;
+			// $bml_menu .= '<menu name="action_menu" align="Left">'.PHP_EOL;
+			$bml_menu .= '<menu text="Menu" key="action">'.PHP_EOL;
 			foreach ($this->menus as $menu_array) {
 				if (! empty($menu_array['key'])) {
 					$action_key = intval($menu_array['key']);
@@ -607,9 +603,9 @@ class biNu_app {
 				if (! empty($menu_array['url'])) {
 					$bml_menu .= trim($menu_array['url']);
 				}
-				$bml_menu .= '</action>'.CR_LF;
+				$bml_menu .= '</action>'.PHP_EOL;
 			}
-			$bml_menu .= '</menu>'.CR_LF;
+			$bml_menu .= '</menu>'.PHP_EOL;
 		}
 
 		return trim($bml_menu);
@@ -634,17 +630,17 @@ class biNu_app {
 		// setcookie('screen_height', $this->screen_height, time()+86400*356);
 		setcookie('screen', $this->screen_width.'x'.$this->screen_height, time()+86400*356);
 		header('Content-Type: text/xml; charset="utf-8"');
-		$this->BML = '<?xml version="1.0" encoding="utf-8"?>'.CR_LF;
-		$this->BML .= '<binu ttl="' . $this->time_to_live . '" developer="' . $this->developer_id . '" app="' . $this->application_id . '">' . CR_LF .
-			$this->get_styles() . CR_LF .
-			'<page>'.CR_LF .
-				$this->header_BML . CR_LF .
-				$this->body_BML . CR_LF .
-				$this->get_text() . CR_LF .
-				$this->footer_BML . CR_LF .
-			'</page>' . CR_LF .
-				$this->get_actions() . CR_LF .
-				$this->get_listings() . CR_LF .
+		$this->BML = '<?xml version="1.0" encoding="utf-8"?>'.PHP_EOL;
+		$this->BML .= '<binu ttl="' . $this->time_to_live . '" developer="' . $this->developer_id . '" app="' . $this->application_id . '">' . PHP_EOL .
+			$this->get_styles() . PHP_EOL .
+			'<page>'.PHP_EOL .
+				$this->header_BML . PHP_EOL .
+				$this->body_BML . PHP_EOL .
+				$this->get_text() . PHP_EOL .
+				$this->footer_BML . PHP_EOL .
+			'</page>' . PHP_EOL .
+				$this->get_actions() . PHP_EOL .
+				$this->get_listings() . PHP_EOL .
 		'</binu>';
 
 		// Display page
@@ -695,7 +691,7 @@ class binu_form extends biNu_app {
 	private function get_fields() {
 		$tmp_bml = '';
 
-		$this->fields_BML = '	<textEntry title="'.parent::xmlentities($this->form_name).'" message="'.parent::xmlentities($this->form_message).'">'.CR_LF;
+		$this->fields_BML = '	<textEntry title="'.parent::xmlentities($this->form_name).'" message="'.parent::xmlentities($this->form_message).'">'.PHP_EOL;
 
 		foreach ($this->text_fields as $field_array) {
 			$tmp_bml .= '		<textEntryField name="'.$field_array['name'].'"';
@@ -716,11 +712,11 @@ class binu_form extends biNu_app {
 			if (! empty($field_array['hide_value'])) {
 				$tmp_bml .= ' hideValue="'.trim($field_array['hide_value']).'"';
 			}
-			$tmp_bml .= '/>'.CR_LF;
+			$tmp_bml .= '/>'.PHP_EOL;
 		}
 
 		$this->fields_BML .= $tmp_bml;
-		$this->fields_BML .= '	</textEntry>'.CR_LF;
+		$this->fields_BML .= '	</textEntry>'.PHP_EOL;
 		return trim($this->fields_BML);
 	}
 	/*
@@ -732,18 +728,18 @@ class binu_form extends biNu_app {
 		// setcookie('screen_width', parent::screen_width, time()+86400*356);
 		// setcookie('screen_height', parent::screen_height, time()+86400*356);
 		header('Content-Type: text/xml; charset="utf-8"');
-		$this->form_BML = '<?xml version="1.0" encoding="utf-8"?>'.CR_LF;
-		$this->form_BML .= '<binu ttl="' . $this->time_to_live . '" developer="' . $this->developer_id . '" app="' . $this->application_id . '">' . CR_LF .
-			'<page>'.CR_LF .
-			'	<pageSegment x="0" y="0">'.CR_LF .
-			$this->get_fields() . CR_LF .
-			'	</pageSegment>' . CR_LF .
-			'</page>' . CR_LF .
-			'<control>' . CR_LF .
-			'	<actions>' . CR_LF .
-			'		<action key="action" spider="N">'.parent::xmlentities($this->form_URL).'</action>' . CR_LF .
-			'	</actions>' . CR_LF .
-			'</control>' . CR_LF .
+		$this->form_BML = '<?xml version="1.0" encoding="utf-8"?>'.PHP_EOL;
+		$this->form_BML .= '<binu ttl="' . $this->time_to_live . '" developer="' . $this->developer_id . '" app="' . $this->application_id . '">' . PHP_EOL .
+			'<page>'.PHP_EOL .
+			'	<pageSegment x="0" y="0">'.PHP_EOL .
+			$this->get_fields() . PHP_EOL .
+			'	</pageSegment>' . PHP_EOL .
+			'</page>' . PHP_EOL .
+			'<control>' . PHP_EOL .
+			'	<actions>' . PHP_EOL .
+			'		<action key="action" spider="N">'.parent::xmlentities($this->form_URL).'</action>' . PHP_EOL .
+			'	</actions>' . PHP_EOL .
+			'</control>' . PHP_EOL .
 		'</binu>';
 
 		// Display page
